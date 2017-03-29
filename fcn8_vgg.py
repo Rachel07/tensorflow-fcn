@@ -35,7 +35,7 @@ class FCN8VGG:
         print("npy file loaded")
 
     def build(self, rgb, train=False, num_classes=20, random_init_fc8=False,
-              debug=False):
+              debug=True):
         """
         Build the VGG model using loaded weights
         Parameters
@@ -139,7 +139,7 @@ class FCN8VGG:
 
         self.pred_up = tf.argmax(self.upscore32, dimension=3)
 
-    def _max_pool(self, bottom, name, debug):
+    def _max_pool(self, bottom, name, debug=True):
         pool = tf.nn.max_pool(bottom, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1],
                               padding='SAME', name=name)
 
@@ -163,7 +163,7 @@ class FCN8VGG:
             return relu
 
     def _fc_layer(self, bottom, name, num_classes=None,
-                  relu=True, debug=False):
+                  relu=True, debug=True):
         with tf.variable_scope(name) as scope:
             shape = bottom.get_shape().as_list()
 
@@ -220,7 +220,7 @@ class FCN8VGG:
             return bias
 
     def _upscore_layer(self, bottom, shape,
-                       num_classes, name, debug,
+                       num_classes, name, debug=True,
                        ksize=4, stride=2):
         strides = [1, stride, stride, 1]
         with tf.variable_scope(name):
